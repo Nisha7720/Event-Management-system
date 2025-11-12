@@ -26,15 +26,13 @@ function Login() {
   };    */
 
   const changeHandlerAdmin =() => {
-    const {email , password} = formData;
+    //const {email , password} = formData;
 
-    console.log(email,password);
+   // console.log(email,password);
 
     //console.log(formData);
 
-
-
-    if(!email && !password ) {
+    if(formData.email && formData.password ) {
       alert("user admin successfully !");
       navigate("/admin");
     }
@@ -45,9 +43,11 @@ function Login() {
   }
 
   const changeHandlerCustomer = () => {
-    const {email, password} = formData;
+   // const {email, password} = formData;
+   // console.log(email,password);
+   // console.log(formData);
 
-    if(!email && !password) {
+    if(formData.email && formData.password) {
       alert("customer login successfully !")
       navigate("/dashboard");
     }

@@ -27,6 +27,7 @@ function Register() {
     });
 
   };
+  console.log(formData);
 
  /* const handleSubmit = (e) => {
     e.preventDefault();
