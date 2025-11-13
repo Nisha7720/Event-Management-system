@@ -1,158 +1,155 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import { register } from "../redux/slices/UserSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaEye ,FaEyeSlash} from "react-icons/fa";
 
 
-function Register() {
-
+const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmpassword: "",
-    role : "user",
-    terms: false
+    confirmPassword: "",
+    role: "customer",
+    agree: false,
   });
 
+  const [showPassword ,setShowPassword] = useState(false);
+  const [showconfirmPassword, setShowconfirmPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleToggleConfirmPassword = () => {
+    setShowconfirmPassword(!showconfirmPassword);
+  };
+
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  const ChangeHandler = (e) => {
-    const {name, value, type, checked} = e.target
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-
-    });
-
-  };
-  console.log(formData);
-
- /* const handleSubmit = (e) => {
-    e.preventDefault();
-    // handle login logic here
-    console.log("Logging in with", formData);
-
-    navigate('/login');
-  };  */
-
-  const changeHandlerRegister = () => {
-    const {name , email, password, confirmpassword} = formData;
-
-    try {
-      if (name && email && password && confirmpassword) {
-        toast.success("successfully register !");
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error("first  you have to register !");
+  const handleRegister = () => {
+    //we have to validate the form data name and password
+    if (!formData.name || !formData.password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    //used for checkbox
+    if (!formData.agree) {
+      toast.warn("Please accept Terms & Conditions");
+      return;
+    }
+     // used for check password and confirm password
+    if(formData.password !== formData.confirmPassword){
+      toast.error("Password and Confirm Password do not match");
+      return;
+    }
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const exists = users.find((u) => u.name === formData.name &&
+     u.email === formData.email );
+    if (exists) {
+      toast.error("Username already exists!");
+      return;
     }
 
-  }
+    dispatch(register({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      role: formData.role,
+    }));
+
+    toast.success("Registration successful!");
+    navigate("/");
+  };
 
   return (
-  <div className="w-full h-full lg:flex lg:justify-around lg:items-center ">
-    {/* this div for form  */}
-   <div className="lg:w-[600px] md:w-[300px] md:h-[250px] lg:h-[600px] mx-auto center px-3 mx-3 py-3 my-3 border border-gray-300 rounded-lg text-left bg-gray-100 shadow-lg mt-3 text-center mx-auto">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-indigo-200">
+      <div className="bg-gray-100 p-6 rounded shadow-md w-80">
+        <h2 className="text-3xl font-bold text-center mb-4">Register</h2>
 
-      <h2 className="text-3xl font-bold text-gray-800 mt-3 mb-3"> Registration Page</h2>
-
-      <form >
         <input
-        className=" border-gray-400 rounded-lg px-2 py-1 w-[340px] mt-2  shadow-md "
           type="text"
-          name="name"
-          placeholder="enter name"
+          placeholder="Username"
           value={formData.name}
-          onChange={ChangeHandler}
-          autoComplete="off" required
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full border px-3 py-2 mb-3 rounded"
         />
-        <br />
-        <br />
 
         <input
-        className="shadow-md border-gray-400 rounded-lg px-2 py-1 w-[340px] mt-2"
-          type="text"
-          name="email"
-          placeholder="enter your email"
-          value={formData.email}
-          onChange={ChangeHandler}
-          autoComplete="off" required
+        type= "text"
+        placeholder="email"
+        value={formData.email}
+        onChange ={(e) =>setFormData({...formData, email:e.target.value })}
+        className = "w-full border px-3 py-2 mb-3 rounded"
         />
-        <br />
-        <br />
+
 
         <input
-          className="shadow-md border-gray-400 rounded-lg px-2 py-1 w-[340px] mt-2"
-          type='text'
-          name='password'
-          placeholder='enter your password'
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Password"
           value={formData.password}
-          onChange={ChangeHandler}
-          autoComplete="off"  required
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          className="w-full border px-3 py-2 mb-3 rounded realative"
         />
-        <br />
-        <br />
+        <div onClick={handleTogglePassword} className="flex justify-end mt-10   absolute top-[38%] left-[58%]   cursor-pointer">
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+
+        </div>
 
         <input
-          className="shadow-md border-gray-400 rounded-lg px-2 py-1 w-[340px] mt-2"
-          type='text'
-          name='confirmpassword'
-          placeholder='confirm password'
-          value={formData.confirmpassword}
-          onChange={ChangeHandler}
-          autoComplete="off"  required
+        type={showconfirmPassword ? 'text' : 'password'}
+        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={(e) => setFormData({...formData, confirmPassword:e.target.value})}
+        className="w-full border px-3 py-2 mb-3 rounded"
         />
-        <br />
-        <br />
+         <div onClick ={handleToggleConfirmPassword}
+         className="flex justify-end mt-10   absolute top-[46%] left-[58%] mb-3 mr-2 cursor-pointer">
+           {  showconfirmPassword ? <FaEyeSlash /> : <FaEye /> }
+         </div>
 
-        <input
-          className="space-x-2 mr-3 text-left"
-          type='checkbox'
-          name='terms'
-          id='terms'
-          checked={formData.terms}
-          onChange={ChangeHandler}
-        />
-        <label htmlFor='terms'
-           className="text-gray-500 font-normal text-md">I agree to the terms and conditions</label>
+        <select
+          value={formData.role}
+          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+          className="w-full border px-3 py-2 mb-3 rounded"
+        >
+          <option value="customer">As a Customer</option>
+          <option value="admin">As an Admin</option>
+        </select>
 
-        <br />
-        <br />
-
-             <select
-             className="shadow-md border-gray-400 rounded-lg px-2 py-1 w-[340px] mt-2"
-             name="role"
-             value={formData.role}
-             onChange={ChangeHandler}>
-             <option value= "admin">As a Admin</option>
-              <option value="customer">As a customer</option>
-            </select>
-        <br />
-        <br />
+        <label className="flex items-center mb-3 text-sm">
+          <input
+            type="checkbox"
+            checked={formData.agree}
+            onChange={(e) => setFormData({ ...formData, agree: e.target.checked })}
+            className="mr-2"
+          />
+          I agree to the terms & conditions
+        </label>
 
         <button
-          className="bg-blue-500 text-white px-3 py-2 rounded-md mt-3   hover:bg-blue-600 cursor-pointer font-normal w-[350px]"
-          onClick= {changeHandlerRegister}>Register as User</button>
-        <br />
-        <br />
+          onClick={handleRegister}
+          className="bg-blue-500 text-white w-full py-2 rounded"
+        >
+          Register
+        </button>
 
-        <p
-         className="text-center text-gray-500 text-md mt-6"
-          onClick={() => navigate("/")}>Don't have an account?
-         <span className='text-blue-500 cursor-pointer'>Login Now</span></p>
-      </form>
-   </div>
+        <p className="text-center mt-3 text-sm">
+          Already have an account?{" "}
+          <span
+            onClick={() => navigate("/")}
+            className="text-blue-600 cursor-pointer underline"
+          >
+            Login
+          </span>
+        </p>
 
-{/* this div for image  */}
-     <div className="lg:w-[600px] md:w-[300px] lg:h-[500px] lg:block md:hidden sm:hidden mx-auto center px-3 mx-3 py-3 my-3  rounded-lg text-left bg-gray-100 shadow-lg mt-3 text-center mx-auto flex justify-center items-center ">
-       <h1 className="text-3xl font-bold text-black">Beautiful Registration page </h1>
-</div>
-
-
-</div>
-  )
-}
+      </div>
+    </div>
+  );
+};
 
 export default Register;

@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import store from "./store/Store"
+import store from "./redux/store.js";
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,7 @@ root.render(
   <BrowserRouter>
     <Provider store={store}>
       <App />
-       <ToastContainer />
+      <ToastContainer />
     </Provider>
 
   </BrowserRouter>

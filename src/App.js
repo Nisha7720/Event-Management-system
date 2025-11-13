@@ -9,9 +9,10 @@ import Register from './pages/Register';
 
 function App() {
   return (
-    <div className="App">
+    <div className=" App">
 
-        <Routes>
+
+            <Routes>
           <Route path="/" element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path="/dashboard" element={<UserDashBoard />} />
@@ -19,8 +20,13 @@ function App() {
           <Route path="/booking" element={<Booking />} />
 
         </Routes>
+
     </div>
   );
 }
 
 export default App;
+
+
+
+//https://react-icons.github.io/react-icons/icons/fa/ --> react icons library
