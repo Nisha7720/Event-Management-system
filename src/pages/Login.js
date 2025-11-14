@@ -1,5 +1,118 @@
 
 
+/*import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/UserSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash} from "react-icons/fa";
+
+/*const Login = () => {
+  const [formData, setFormData] = useState({ name: "", password: "" });
+  const [role, setRole] = useState("");
+  const [showpassword, setShowpassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+  const handleLogin = () => {
+    if (!formData.name || !formData.password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    if (!role) {
+      toast.warn("Select Admin or Customer");
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find(
+      (u) => u.name === formData.name && u.password === formData.password && u.role === role
+    );
+
+    if (!user) {
+      toast.error("Invalid Detailed ");
+      return;
+    }
+
+    dispatch(login(user));
+    toast.success(`Welcome ${user.name}!`);
+    navigate(user.role === "admin" ? "/admin" : "/dashboard");
+  };
+
+  //used for toggle password show and hide
+  const togglePassword = () => {
+    setShowpassword(!showpassword);
+  };
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen   space-y-4 bg-indigo-200">
+      <div className="bg-gray-100 p-6 rounded shadow-md w-90 h-100 md:w-80">
+        <h2 className="text-3xl font-bold text-center mb-4">Login</h2>
+
+        <input
+          type="text"
+          placeholder="Username"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full border px-3 py-2 mb-3 rounded"
+        />
+        <input
+          type={showpassword ? 'text' : 'password'}
+          placeholder="Password"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          className="w-full border px-3 py-2 mb-3 rounded relative"
+        />
+      <div className="flex justify-end mt-10 mb-3 mr-2 cursor-pointer  absolute top-[40%] left-[58%]" onClick={togglePassword}>
+          {showpassword ? <FaEyeSlash /> : <FaEye />}
+        </div>
+
+        <div className="flex justify-between mb-5">
+          <button
+            onClick={() => setRole("admin")}
+            className={`w-[48%] py-2 rounded ${
+              role === "admin" ? "bg-blue-400 text-white" : "bg-gray-300 text-gray-700"
+            }`}
+          >
+            Admin
+          </button>
+          <button
+            onClick={() => setRole("customer")}
+            className={`w-[48%] py-2 rounded ${
+          role === "customer" ? "bg-blue-400 text-white" : "bg-gray-300 text-gray-700"
+            }`}
+          >
+            Customer
+          </button>
+        </div>
+
+        <button
+          onClick={handleLogin}
+          className="bg-blue-500 text-white w-full py-2 rounded"
+        >
+          Login
+        </button>
+
+        <p className="text-center mt-4 text-sm">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/register")}
+            className="text-blue-600 cursor-pointer underline"
+          >
+            Register
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Login;  */
+
+
+
+
+
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slices/UserSlice";
@@ -31,7 +144,7 @@ const Login = () => {
     );
 
     if (!user) {
-      toast.error("Invalid credentials");
+      toast.error("Invalid Detailed ");
       return;
     }
 
@@ -45,7 +158,7 @@ const Login = () => {
     setShowpassword(!showpassword);
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-4 bg-indigo-200">
+    <div className="flex flex-col items-center justify-center min-h-screen   space-y-4 bg-indigo-200">
       <div className="bg-gray-100 p-6 rounded shadow-md w-90 h-100 md:w-80">
         <h2 className="text-3xl font-bold text-center mb-4">Login</h2>
 
@@ -108,9 +221,6 @@ const Login = () => {
 };
 
 export default Login;
-
-
-
 
 
 

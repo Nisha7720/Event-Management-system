@@ -1,49 +1,59 @@
 import React from "react";
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import { cancelBooking } from "../redux/slices/BookinSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const Booking= () => {
-  console.log("Rendering BookingPage");
+const MyBookingsPage = () => {
+  //console.log("MyBookingsPage Rendered");
+  const bookings = useSelector((state) => state?.booking?.bookings);
+  const user = useSelector((state) => state?.user?.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const events = useSelector((state) => state?.event.events);
-   const navigate = useNavigate();
-   // console.log("Events in BookingPage:", events);
+  const myBookings = bookings.filter((b) => b?.username === user?.name);
+
+  const handleCancel = (id) => {
+   dispatch(cancelBooking(id));
+    toast.info("Booking cancelled!");
+  };
 
   return (
-
-    //console.log("Rendering BookingPage - Return JSX"),
-
-    <div className="min-h-screen bg-indigo-200 flex flex-col items-center py-10">
-      <h2 className="text-3xl font-bold mb-6">Booking Page</h2>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+      <h2 className="text-3xl font-bold mb-6">My Bookings</h2>
 
       <div className="bg-white p-6 rounded shadow-md w-[400px]">
-        <h3 className="text-xl font-semibold mb-3">Available Events for Booking</h3>
-        {events.length === 0 ? (
-          <p className="text-gray-500 text-sm">No events available right now.</p>
+        {myBookings?.length === 0 ? (
+          <p className="text-gray-500 text-sm">You have no bookings yet.</p>
         ) : (
-          events.map((event) => (
+          myBookings?.map((booking) => (
             <div
-              key={event?.id}
+              key={booking.id}
               className="flex justify-between items-center border-b py-2"
             >
-              <span>{event.name}</span>
-              <button className="bg-green-400 text-white px-3 py-1 rounded text-md">
-                Book Now
+              <span>{booking.eventName}</span>
+              <button
+                onClick={() => handleCancel(booking.id)}
+                className="text-red-600 hover:underline text-sm"
+              >
+                Cancel
+              </button>
+
+              <button>
+
               </button>
             </div>
           ))
         )}
       </div>
 
-     <button
-        onClick={() => navigate("/")}
-        className="mt-6 bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded"
-      >
-        Logout
-      </button>
-
-      </div>
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="mt-6 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 cursor-pointer">
+         Log Out
+     </button>
+    </div>
   );
 };
 
-export default Booking;
+export default MyBookingsPage;

@@ -30,40 +30,52 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    //we have to validate the form data name and password
-    if (!formData.name || !formData.password) {
-      toast.error("Please fill all fields");
-      return;
-    }
-    //used for checkbox
-    if (!formData.agree) {
-      toast.warn("Please accept Terms & Conditions");
-      return;
-    }
-     // used for check password and confirm password
-    if(formData.password !== formData.confirmPassword){
-      toast.error("Password and Confirm Password do not match");
-      return;
-    }
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const exists = users.find((u) => u.name === formData.name &&
-     u.email === formData.email );
-    if (exists) {
-      toast.error("Username already exists!");
-      return;
-    }
+const handleRegister = () => {
+  if (!formData.name || !formData.password || !formData.email) {
+    toast.error("Please fill all fields");
+    return;
+  }
 
-    dispatch(register({
+  if (!formData.agree) {
+    toast.warn("Please accept Terms & Conditions");
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    toast.error("Password and Confirm Password do not match");
+    return;
+  }
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  const exists = users.find((u) => u.name === formData.name);
+  if (exists) {
+    toast.error("Username already exists!");
+    return;
+  }
+
+  //  Save new user to localStorage
+  users.push({
+    name: formData.name,
+    email: formData.email,
+    password: formData.password,
+    role: formData.role,
+  });
+
+  localStorage.setItem("users", JSON.stringify(users));
+
+  dispatch(
+    register({
       name: formData.name,
       email: formData.email,
-      password: formData.password,
       role: formData.role,
-    }));
+    })
+  );
 
-    toast.success("Registration successful!");
-    navigate("/");
-  };
+  toast.success("Registration successful!");
+  navigate("/");
+};
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-indigo-200">
