@@ -3,8 +3,7 @@ import { useDispatch } from "react-redux";
 import { register } from "../redux/slices/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaEye ,FaEyeSlash} from "react-icons/fa";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +15,7 @@ const Register = () => {
     agree: false,
   });
 
-  const [showPassword ,setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
 
   const handleTogglePassword = () => {
@@ -26,56 +25,54 @@ const Register = () => {
     setShowconfirmPassword(!showconfirmPassword);
   };
 
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-const handleRegister = () => {
-  if (!formData.name || !formData.password || !formData.email) {
-    toast.error("Please fill all fields");
-    return;
-  }
+  const handleRegister = () => {
+    if (!formData.name || !formData.password || !formData.email) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
-  if (!formData.agree) {
-    toast.warn("Please accept Terms & Conditions");
-    return;
-  }
+    if (!formData.agree) {
+      toast.warn("Please accept Terms & Conditions");
+      return;
+    }
 
-  if (formData.password !== formData.confirmPassword) {
-    toast.error("Password and Confirm Password do not match");
-    return;
-  }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Password and Confirm Password do not match");
+      return;
+    }
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+    let users = JSON.parse(localStorage.getItem("users")) || [];
 
-  const exists = users.find((u) => u.name === formData.name);
-  if (exists) {
-    toast.error("Username already exists!");
-    return;
-  }
+    const exists = users.find((u) => u.name === formData.name);
+    if (exists) {
+      toast.error("Username already exists!");
+      return;
+    }
 
-  //  Save new user to localStorage
-  users.push({
-    name: formData.name,
-    email: formData.email,
-    password: formData.password,
-    role: formData.role,
-  });
-
-  localStorage.setItem("users", JSON.stringify(users));
-
-  dispatch(
-    register({
+    //  Save new user to localStorage
+    users.push({
       name: formData.name,
       email: formData.email,
+      password: formData.password,
       role: formData.role,
-    })
-  );
+    });
 
-  toast.success("Registration successful!");
-  navigate("/");
-};
+    localStorage.setItem("users", JSON.stringify(users));
 
+    dispatch(
+      register({
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+      })
+    );
+
+    toast.success("Registration successful!");
+    navigate("/");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-indigo-200">
@@ -91,37 +88,44 @@ const handleRegister = () => {
         />
 
         <input
-        type= "text"
-        placeholder="email"
-        value={formData.email}
-        onChange ={(e) =>setFormData({...formData, email:e.target.value })}
-        className = "w-full border px-3 py-2 mb-3 rounded"
+          type="text"
+          placeholder="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          className="w-full border px-3 py-2 mb-3 rounded"
         />
-
 
         <input
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
+          }
           className="w-full border px-3 py-2 mb-3 rounded realative"
         />
-        <div onClick={handleTogglePassword} className="flex justify-end mt-10   absolute top-[38%] left-[58%]   cursor-pointer">
+        <div
+          onClick={handleTogglePassword}
+          className="flex justify-end mt-10   absolute top-[38%] left-[58%]   cursor-pointer"
+        >
           {showPassword ? <FaEyeSlash /> : <FaEye />}
-
         </div>
 
         <input
-        type={showconfirmPassword ? 'text' : 'password'}
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={(e) => setFormData({...formData, confirmPassword:e.target.value})}
-        className="w-full border px-3 py-2 mb-3 rounded"
+          type={showconfirmPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={(e) =>
+            setFormData({ ...formData, confirmPassword: e.target.value })
+          }
+          className="w-full border px-3 py-2 mb-3 rounded"
         />
-         <div onClick ={handleToggleConfirmPassword}
-         className="flex justify-end mt-10   absolute top-[46%] left-[58%] mb-3 mr-2 cursor-pointer">
-           {  showconfirmPassword ? <FaEyeSlash /> : <FaEye /> }
-         </div>
+        <div
+          onClick={handleToggleConfirmPassword}
+          className="flex justify-end mt-10   absolute top-[46%] left-[58%] mb-3 mr-2 cursor-pointer"
+        >
+          {showconfirmPassword ? <FaEyeSlash /> : <FaEye />}
+        </div>
 
         <select
           value={formData.role}
@@ -136,7 +140,9 @@ const handleRegister = () => {
           <input
             type="checkbox"
             checked={formData.agree}
-            onChange={(e) => setFormData({ ...formData, agree: e.target.checked })}
+            onChange={(e) =>
+              setFormData({ ...formData, agree: e.target.checked })
+            }
             className="mr-2"
           />
           I agree to the terms & conditions
@@ -158,7 +164,6 @@ const handleRegister = () => {
             Login
           </span>
         </p>
-
       </div>
     </div>
   );

@@ -1,14 +1,13 @@
-
- import React from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addBooking } from "../redux/slices/BookinSlice";
 
 const Customer = () => {
-  const events = useSelector((state) => state.event?.events);
-  const bookings = useSelector((state) => state.booking?.bookings);
-   const user = useSelector((state) => state.user?.user);
+  const events = useSelector((state) => state?.event?.events);
+  const bookings = useSelector((state) => state?.booking?.bookings);
+  const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,12 +26,12 @@ const Customer = () => {
       eventId: event.id || "New ID",
       eventName: event.name || "Event Name",
       username: user.name || "user name",
-      eventDesc:event.description,
-      eventLoc : event.location,
+      eventDesc: event.description,
+      eventLoc: event.location,
       eventDate: event.date,
       date: new Date().toLocaleDateString(),
     };
-    //console.log(event.name, user.name);
+    console.log(event.name, user.name);
 
     dispatch(addBooking(booking));
     toast.success("Event booked successfully!");
@@ -45,17 +44,19 @@ const Customer = () => {
       <div className="bg-gray-300 p-6 rounded shadow-md w-[800px] h-[500px] ">
         <h3 className="text-xl font-semibold mb-3">Available Events</h3>
         {events.length === 0 ? (
-          <p className="text-gray-500 text-sm">No events available right now.</p>
+          <p className="text-gray-500 text-sm">
+            No events available right now.
+          </p>
         ) : (
-          events.map((event) => (
+          events?.map((event) => (
             <div
               key={event.id}
               className="flex justify-between items-center border-b py-2"
             >
-                <span>{event.name}</span>
-                <span>{event.description}</span>
-                <span>{event.location}</span>
-                <span>{event.date}</span>
+              <span>{event.name}</span>
+              <span>{event.description}</span>
+              <span>{event.location}</span>
+              <span>{event.date}</span>
 
               <button
                 onClick={() => handleBook(event)}

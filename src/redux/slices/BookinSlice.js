@@ -1,7 +1,3 @@
-
-
-
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -14,18 +10,17 @@ const bookingSlice = createSlice({
   reducers: {
     addBooking: (state, action) => {
       state.bookings.push(action.payload);
-      localStorage.setItem("Bookings", JSON.stringify(state.bookings));
+      //  localStorage.setItem("Bookings", JSON.stringify(state.bookings));
     },
 
-    cancelBooking: (state, action) => {
+    chancelBooking: (state, action) => {
       state.bookings = state.bookings.filter(
         (booking) => booking.id !== action.payload.id
       );
-      localStorage.setItem("Bookings", JSON.stringify(state.bookings));
+      //  localStorage.setItem("Bookings", JSON.stringify(state.bookings));
     },
-
   },
 });
 
-export const { addBooking, cancelBooking } = bookingSlice.actions;
+export const { addBooking, chancelBooking } = bookingSlice.actions;
 export default bookingSlice.reducer;
