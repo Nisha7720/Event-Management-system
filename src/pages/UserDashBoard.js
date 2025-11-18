@@ -12,6 +12,16 @@ const Customer = () => {
   const navigate = useNavigate();
 
   const handleBook = (event) => {
+    if (!user) {
+      toast.error("Please login first!");
+      return;
+    }
+
+    if (!event) {
+      toast.error("Event data missing!");
+      return;
+    }
+
     const alreadyBooked = bookings.find(
       (b) => b.eventId === event.id && b.username === user.name
     );
@@ -31,7 +41,6 @@ const Customer = () => {
       eventDate: event.date,
       date: new Date().toLocaleDateString(),
     };
-    console.log(event.name, user.name);
 
     dispatch(addBooking(booking));
     toast.success("Event booked successfully!");
